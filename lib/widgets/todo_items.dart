@@ -1,41 +1,64 @@
-import 'package:chat_app/colors.dart';
-import 'package:chat_app/home.dart';
+import 'package:chat_app/model/colors.dart';
+import 'package:chat_app/pages/home.dart';
 import 'package:flutter/material.dart';
-import '../model/todo.dart';
+import 'package:chat_app/model/todo.dart';
+
 class todoitem extends StatelessWidget {
-  final ToDo todo;
-  final onTodochange;
-  final onDeleteItem;
-  const todoitem({Key? key,required this.todo,required this.onTodochange,required this.onDeleteItem}) : super(key: key);
+  final String taskname;
+  final String date;
+  final String time;
+  final int index;
+  final bool iscomplete;
+  Function(bool?)? onChanged;
+  final deleteFunction;
 
 
+  todoitem({
+    super.key,
+    required this.taskname,
+    required this.date,
+    required this.time,
+    required this.index,
+    required this.iscomplete,
+    required this.onChanged,
+    required this.deleteFunction,
+  });
+  ToDo td = ToDo();
   @override
   Widget build(BuildContext context) {
     return
       Container(
+
       margin: EdgeInsets.only(bottom: 20),
       child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+        ),
         height: 80,
         child: ListTile(
-        onTap: (){
-          onTodochange(todo);
-        },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           contentPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
         tileColor: Colors.white,
-          leading: Icon(todo.isDone?Icons.check_box:Icons.check_box_outline_blank,
-            color: my_blue,
+          leading:  Checkbox(
+            value: iscomplete,
+            onChanged: onChanged,
+            activeColor: Colors.black,
           ),
-            title:Text(
-                todo.todotext!,
+
+
+            title:Text(taskname,
             style: TextStyle(
               fontSize: 16,
               color: my_black,
-              decoration:todo.isDone? TextDecoration.lineThrough:null,
+              decoration:iscomplete?TextDecoration.lineThrough:TextDecoration.none,
             ),),
+
+
           subtitle: Text(
-            todo.deadline
-          ),
+              date,style: TextStyle(color: my_grey),),
+
+
             trailing: Column(
               children: [
                 Container(
@@ -43,22 +66,23 @@ class todoitem extends StatelessWidget {
                 height: 30,
                   width: 30,
                   decoration: BoxDecoration(
-                    color:my_red,
+                    color:Colors.white,
                     borderRadius:BorderRadius.circular(5)
                   ),
                   child: IconButton(
-                    color: Colors.white,
+                    color: my_black,
                     iconSize: 18,
                     icon: Icon(Icons.delete),
-                    onPressed: (){
-                      onDeleteItem(todo.id);
-                  },
+                    onPressed:(){
+                     deleteFunction(index);
+                    },
                   ),
         ),
+
                 Container(
                   margin: EdgeInsets.only(top: 2),
                   child: Text(
-                    todo.date.toString(),style: TextStyle(fontSize: 12,color:Colors.grey),
+                    time,style: TextStyle(fontSize: 12,color:my_grey),
                   ),
                 ),
               ],

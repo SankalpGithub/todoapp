@@ -1,17 +1,19 @@
+import 'package:hive_flutter/hive_flutter.dart';
 class ToDo{
-  String? id;
-  String? todotext;
-  String date;
-  String deadline;
-  bool isDone;
+  List todolist = [];
 
-  ToDo({required this.id,
-    required this.date,
-    required this.deadline,
-      required this.todotext,
-      this.isDone = false});
+    final mybox = Hive.box('mybox');
 
-  static List<ToDo> todolist(){
-    return [];
+    void createInitialData() {
+      todolist = [
+        ["somework","no deadline","5:44 PM",false,"id"],
+        ["anywork","Jul 22, 2023","5:42 AM",true,"id1"],
+      ];
+    }
+    void loaddata(){
+      todolist = mybox.get("TODOLIST");
+    }
+    void updatedata(){
+      mybox.put("TODOLIST",todolist);
+    }
   }
-}
